@@ -3,4 +3,4 @@ My personal portfolio
 
 Using:
 
-vanillaJs, Native MongoDB driver, JAMstack
+vanillaJs, Native MongoDB driver, JAMstack, github pages for hosting
