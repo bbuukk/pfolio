@@ -3,14 +3,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { WebpackPluginServe } = require('webpack-plugin-serve')
 const Dotenv = require('dotenv-webpack')
 
+// const basePath = path.resolve(__dirname);
+
 const dotenv = require('dotenv')
-dotenv.config()
+dotenv.config({ path: "./cfg/.env" });
 
 module.exports = {
   mode: process.env.NODE_ENV,
   entry: ['./src/index.ts', 'webpack-plugin-serve/client'],
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist'), 
     filename: 'bundle.js',
   },
   resolve: {
@@ -20,25 +22,48 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              configFile: path.resolve(__dirname, 'cfg/tsconfig.json'), 
+            },
+          },
+        ],        
         exclude: /node_modules/,
       },
       { test: /\.js$/, use: 'swc-loader', exclude: /node_modules/ },
       { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './index.html',
+      template: './src/index.html',
+      favicon: './assets/images/favicon.ico',       
     }),
-    new WebpackPluginServe({
-      port: parseInt(process.env.PORT, 10) || 8080,
+    new WebpackPluginServe({    
+      port: parseInt(process.env.PORT, 10),
       static: './dist',
       liveReload: true,
       waitForBuild: true,
-      open: true,
+      open: false,
     }),
     new Dotenv(),
-  ],
-  watch: true,  
+  ],  
 }
+
+
+
+
+//todo
+      // { test: /\.(png|svg|jpg|jpeg|gif|ico|webmanifest|xml)$/,
+      //   use: [
+      //     {
+      //       loader: 'file-loader',
+      //       options: {
+      //         name: '[name].[hash].[ext]',
+      //         outputPath: 'assets/images/icons/',
+      //       },
+      //     },
+      //   ],}

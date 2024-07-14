@@ -1,6 +1,7 @@
 {
   // "include": ["src/**/*"],
-  "include": ["src/**/*", "src/global.d.ts"],
+  //to
+  "include": ["../src/**/*", "../src/global.d.ts"],
   "exclude": [
     "node_modules"
   ],
@@ -17,8 +18,8 @@
 
     "moduleResolution": "node",
 
-    "outDir": "./dist",
-    "baseUrl": "./src",
+    "outDir": "../dist",
+    "baseUrl": "../src",
 
     "sourceMap": true,
     "strict": true,
