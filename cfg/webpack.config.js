@@ -1,22 +1,25 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { WebpackPluginServe } = require('webpack-plugin-serve')
-const Dotenv = require('dotenv-webpack')
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { WebpackPluginServe } from 'webpack-plugin-serve';
+import Dotenv from 'dotenv-webpack';
 
-const dotenv = require('dotenv')
+import dotenv from 'dotenv'
 dotenv.config({ path: "./cfg/.env" });
 
-module.exports = {
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+console.log(__dirname)
+
+export default {
   mode: process.env.NODE_ENV,
-  // entry: [path.resolve(__dirname, '../src/index.ts')       , 'webpack-plugin-serve/client'],
-  entry: ['./src/index.ts'       , 'webpack-plugin-serve/client'],
+  entry: ['./src/index.ts', 'webpack-plugin-serve/client'],
   output: {
-    path: path.resolve(__dirname, '../dist'), 
+    path: path.resolve(__dirname, '../dist'),
     filename: 'bundle.js',
   },
-  resolve: {
+  resolve: {    
+    modules: [path.resolve(__dirname, '../.'), 'node_modules'],
     extensions: ['.tsx', '.ts', '.js'],
-  },
+  },  
   module: {
     rules: [
       {
@@ -25,44 +28,51 @@ module.exports = {
           {
             loader: 'ts-loader',
             options: {
-              configFile: path.resolve(__dirname, './tsconfig.json'),               
+              configFile: path.resolve(__dirname, './tsconfig.json'),
             },
           },
-        ],        
+        ],
         exclude: /node_modules/,
       },
       { test: /\.js$/, use: 'swc-loader', exclude: /node_modules/ },
       { test: /\.css$/, use: ['style-loader', 'css-loader'] },
-
+      {
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              outputPath: 'fonts/', 
+            },
+          },
+        ],
+      },
+      // {
+      //   test: /\.(png|svg|jpg|jpeg|gif|ico|webmanifest|xml)$/,
+      //   type: 'asset/resource',
+      //   generator: {
+      //     filename: 'assets/images/icons/[name].[hash][ext]',
+      //   },
+      // },
     ],
   },
   plugins: [
-    new HtmlWebpackPlugin({      
+    new HtmlWebpackPlugin({
       template: './src/index.html',
-      favicon: './assets/images/favicon.ico'
+      favicon: './assets/images/favicon.ico',
     }),
-    new WebpackPluginServe({    
+    new WebpackPluginServe({
       port: parseInt(process.env.PORT, 10),
       static: './dist',
       liveReload: true,
       waitForBuild: true,
       open: false,
     }),
-    new Dotenv({      path: './cfg/.env' }),
-  ],  
-}
+    new Dotenv({ path: './cfg/.env' }),
+  ],
+};
 
-
-
-
-//todo
-      // { test: /\.(png|svg|jpg|jpeg|gif|ico|webmanifest|xml)$/,
-      //   use: [
-      //     {
-      //       loader: 'file-loader',
-      //       options: {
-      //         name: '[name].[hash].[ext]',
-      //         outputPath: 'assets/images/icons/',
-      //       },
-      //     },
-      //   ],}

@@ -1,12 +1,11 @@
-{
-  // "include": ["src/**/*"],
-  //to
+{  
   "include": ["../src/**/*", "../src/global.d.ts"],
   "exclude": [
-    "node_modules"
+    "node_modules", "dist"
   ],
 
   "compilerOptions": {
+
     "lib": [
       "es5",
       "es2015",

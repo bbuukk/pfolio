@@ -22,4 +22,6 @@ HTMLElement.prototype.$$ = function(selector: string): NodeList {
 };
 
 
-export { $, $$ }
+
+
+
