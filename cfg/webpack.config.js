@@ -3,16 +3,15 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { WebpackPluginServe } = require('webpack-plugin-serve')
 const Dotenv = require('dotenv-webpack')
 
-// const basePath = path.resolve(__dirname);
-
 const dotenv = require('dotenv')
 dotenv.config({ path: "./cfg/.env" });
 
 module.exports = {
   mode: process.env.NODE_ENV,
-  entry: ['./src/index.ts', 'webpack-plugin-serve/client'],
+  // entry: [path.resolve(__dirname, '../src/index.ts')       , 'webpack-plugin-serve/client'],
+  entry: ['./src/index.ts'       , 'webpack-plugin-serve/client'],
   output: {
-    path: path.resolve(__dirname, 'dist'), 
+    path: path.resolve(__dirname, '../dist'), 
     filename: 'bundle.js',
   },
   resolve: {
@@ -26,7 +25,7 @@ module.exports = {
           {
             loader: 'ts-loader',
             options: {
-              configFile: path.resolve(__dirname, 'cfg/tsconfig.json'), 
+              configFile: path.resolve(__dirname, './tsconfig.json'),               
             },
           },
         ],        
@@ -38,9 +37,9 @@ module.exports = {
     ],
   },
   plugins: [
-    new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin({      
       template: './src/index.html',
-      favicon: './assets/images/favicon.ico',       
+      favicon: './assets/images/favicon.ico'
     }),
     new WebpackPluginServe({    
       port: parseInt(process.env.PORT, 10),
@@ -49,7 +48,7 @@ module.exports = {
       waitForBuild: true,
       open: false,
     }),
-    new Dotenv(),
+    new Dotenv({      path: './cfg/.env' }),
   ],  
 }
 
